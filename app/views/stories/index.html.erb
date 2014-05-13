@@ -1,0 +1,50 @@
+<vr/>
+<% if current_user %>
+<%= form_tag("stories/new", :method => "get") do %>
+<%= submit_tag("Post a new story", class: "btn btn-primary") %>
+<br/><br/>
+<% end %>
+<% end %>
+
+<% i = 0 %>
+<% Story.each do |story| %>
+
+<div class="row">
+  <!-- upvote link /-->
+  <div class="col-md-1">
+    <% if current_user && !story.voters.include?(current_user.id) %>
+    <%= link_to "Upvote", "/stories/" + story[:id] + "/upvote_story", :story_id => story[:id] %>
+    <% else %>
+    Upvoted!
+    <% end %>
+  </div>
+
+  <!-- number of votes /-->
+  <div class="col-md-1">
+  <%= story.votes %> votes
+  </div>
+
+  <!-- story title /-->
+  <div class="col-md-10">
+    <a href="<%= story.url %>"><strong><%= story.title %></strong></a>
+  </div>
+</div>
+
+<div class="row">
+  
+  <div class="col-md-2">
+  </div>
+
+  <!-- author /-->
+  <div class="col-md-8">
+    posted by <%= story[:username] %> <%= story[:created_at].strftime("on %m/%d/%Y at %I:%M%p") %>
+  </div>
+
+  <!-- comments /-->
+  <div class="col-md-2">
+    <%= link_to story.comment_count.to_s + " comments", "/stories/" + story[:id] + "/show_comments" %>
+  </div>
+
+</div>
+<% end %>
+

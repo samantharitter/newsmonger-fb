@@ -1,0 +1,63 @@
+<%= link_to "Back", "/stories"  %>
+
+<a href="<%= @story.url %>"><h1><%= @story.title %></h1></a>
+posted by <%= @story.username %> <%= @story.created_at.strftime("on %m/%d/%Y at %I:%M%p") %><br/>
+<%= @story.votes %> votes
+<br/><br/>
+
+<% if current_user %>
+<%= form_tag(new_comment_path, :method => "get") do %>
+<%= text_area_tag(:body, "", size: "86x3") %><br/>
+<%= hidden_field_tag "parent_id", nil %>
+<%= hidden_field_tag "story_id", @story.id %>
+<br/>
+<%= submit_tag("Comment", class: "btn btn-primary") %>
+<% end %>
+<% end %>
+<br/>
+
+<!-- display comments here /-->
+<strong><%= @comments.length %> comments</strong><br/>
+<% @comments.each do |comment| %>
+
+<!-- push back some amount if this is a reply /-->
+<div class="row">
+  
+  <% i = comment['depth'] > 8 ? 8 : comment['depth'] %>
+  <% i.times do %>
+  <div class="col-md-1"></div>
+  <% end %>
+  
+  <div class="col-md-<%= 12 - i %>">
+
+    <!-- username and date /-->
+    <div class="row">
+      <div class="col-md-12">
+        <small>Posted by <%= comment['username'] %> <%= comment['created_at'].strftime("on %m/%d/%Y at %I:%M%p") %></small>
+      </div>
+    </div>
+    
+    <!-- comment body /-->
+    <div class="row">
+      <div class="col-md-12">
+        <%= comment['body'] %>
+      </div>
+    </div>
+    
+    <!-- link to reply /-->
+    <div class="row">
+      <div class="col-md-12" id="reply-div-<%=comment['comment_id']%>">
+        
+        <span id="reply-form-<%= comment['comment_id'] %>"></span>
+        <% if current_user %>
+        <span class="reply-to-comment" comment-id="<%= comment['comment_id'] %>" story-id="<%= @story.id %>" class="btn btn-secondary">
+          Reply
+        </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+</div>
+<br/>
+<% end %>

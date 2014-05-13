@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FbNewsmonger</title>
+  <%= stylesheet_link_tag "main" %>
+  <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<div class="container">
+  <div class="well" style="padding:50px;">
+    <div id="user-widget" class="text-right">
+      <% if current_user %>
+      Welcome, <strong><%= current_user.name %></strong>!
+      <%= link_to "Sign out", "signout", id: "sign_out" %>
+      <% else %>
+      <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
+      <% end %>
+    </div>
+
+    <div id="main-header" class="text-center">
+      <h1>NEWSMONGER!</h1>
+      <p>All the news that's fit to reprint.</p>
+    </div>
+    <%= yield %>
+  </div>
+</div>
+
+</body>
+</html>

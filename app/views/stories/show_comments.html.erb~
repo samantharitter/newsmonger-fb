@@ -1,0 +1,39 @@
+<%= link_to "Back", "/stories"  %>
+
+<a href="<%= @story.url %>"><h1><%= @story.title %></h1></a>
+posted by <%= @story.username %> <%= @story.created_at.strftime("on %m/%d/%Y at %I:%M%p") %><br/>
+<%= @story.votes %> votes
+<br/><br/>
+
+<%= form_tag(new_comment_path, :method => "get") do %>
+<%= text_area_tag(:body, "", size: "86x3") %><br/>
+<%= hidden_field_tag "parent_id", nil %>
+<%= hidden_field_tag "story_id", @story.id %>
+<%= submit_tag("Comment", class: "btn btn-primary") %>
+<% end %>
+
+<!-- display comments here /-->
+<% @comments.each do |comment| %>
+
+<!-- username and date /-->
+<div class="row">
+  <div class="col-md-12">
+<small>Posted by <%= comment['username'] %> <%= comment['created_at'].strftime("on %m/%d/%Y at %I:%M%p") %></small>
+  </div>
+</div>
+
+<!-- comment body /-->
+<div class="row">
+  <div class="col-md-12">
+    <%= comment['body'] %>
+  </div>
+</div>
+
+<!-- link to reply /-->
+<div class="row">
+  <div class="col-md-12">
+    <%= link_to "reply", "comments/create", :comment => { :story_id => @story.id,
+                                                          :parent_id => comment[:id] } %>
+  </div>
+</div>
+<% end %>

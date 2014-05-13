@@ -1,0 +1,3 @@
+Sorry, there was an error!  
+
+<%= link_to "Try again", "stories/new", id: "try_again" %>
